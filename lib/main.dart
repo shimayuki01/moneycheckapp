@@ -30,10 +30,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Thing> items = new List<Thing>()
-    ..length = 5;
+  List<Thing> items = List<Thing>.generate(5, (i) => new Thing());
   double _sum = 0;
   double _tax = 10;
+
 
 
   void _incrementList() {
@@ -59,6 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
       _sum = sum;
     });
   }
+
+
 
 
   @override
@@ -97,81 +99,89 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Text("金額"),
-                Text("メモ"),
-                Text("個数"),
-              ],
-            ),
-            Expanded(
-              child: ListView.separated(
-                  itemCount: items.length + 1,
-                  separatorBuilder: (BuildContext context, index) =>
-                      Divider(
-                        color: Colors.black,
+      body: Column(
+        children: [
+          Row(
+            children: [
+              Text("金額"),
+              Text("メモ"),
+              Text("個数"),
+            ],
+          ),
+          Expanded(
+            child: ListView.separated(
+                itemCount: items.length + 1,
+                separatorBuilder: (BuildContext context, index) =>
+                    Divider(
+                      color: Colors.black,
+                    ),
+                itemBuilder: (context, index) {
+                  if (index < items.length) {
+                    return Dismissible(
+                      key: Key(index.toString()),
+                      background: Container(color: Colors.red),
+                      child: ListTile(
+                        leading: TextFormField(
+                          initialValue: items[index]._money.toString(),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'[0-9]'))
+                          ],
+                          onChanged: _handleMoney,
+                        ),
+                        title: TextFormField(
+                          initialValue: items[index]._name,
+                          //onChanged:,
+                        ),
+                        trailing: Row(
+                          children: [
+                            GestureDetector(
+                              child: Icon(CupertinoIcons.minus_circled),
+                              //onTap:,
+                            ),
+                            Text(items[index]._quantity.toString()),
+                            GestureDetector(
+                              child: Icon(CupertinoIcons.add_circled),
+                              //onTap:,
+                            )
+                          ],
+                        ),
                       ),
-                  itemBuilder: (context, index) {
-                    if (index < items.length) {
-                      return Dismissible(
-                        key: Key(index.toString()),
-                        background: Container(color: Colors.red),
-                        child: ListTile(
-                          leading: TextFormField(
-                            initialValue: items[index]._money.toString(),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'[0-9]'))
-                            ],
-                            onChanged: _handleMoney,
-                          ),
-                          title: TextFormField(
-                            initialValue: items[index]._name,
-                            onChanged:,
-                          ),
-                          trailing: Row(
-                            children: [
-                              GestureDetector(
-                                child: Icon(CupertinoIcons.minus_circled),
-                                onTap:,
-                              ),
-                              Text(items[index]._quantity.toString()),
-                              GestureDetector(
-                                child: Icon(CupertinoIcons.add_circled),
-                                onTap:,
-                              )
-                            ],
-                          ),
-                        ),
-                        onDismissed: (direction) {
-                          setState(() {
-                            items.removeAt(index);
-                          });
-                        },
-                      );
-                    } else {
-                      return ListTile(
-                        leading: GestureDetector(
-                          child: Icon(CupertinoIcons.add),
-                          onTap: _incrementList,
-                        ),
-                      );
-                    }
-                  }),
-            ),
-            Text("広告を載せる"),
-          ],
-        ),
+                      onDismissed: (direction) {
+                        setState(() {
+                          items.removeAt(index);
+                        });
+                      },
+                    );
+                  } else {
+                    return ListTile(
+                      leading: GestureDetector(
+                        child: Icon(CupertinoIcons.add),
+                        onTap: _incrementList,
+                      ),
+                    );
+                  }
+                }),
+          ),
+          Text("広告を載せる"),
+        ],
       ),
     );
   }
 }
 
 class Thing {
-  double _money = 0;
+  double _money;
   String _name;
-  int _quantity = 1;
+  int _quantity;
+
+  Thing(){
+    _money = 0;
+   _quantity = 1;
+  }
+
+  String toString() {
+    return 'money: $_money name: $_name quantity: $_quantity';
+  }
+
 }
