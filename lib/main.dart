@@ -121,30 +121,39 @@ class _MyHomePageState extends State<MyHomePage> {
                       key: Key(index.toString()),
                       background: Container(color: Colors.red),
                       child: ListTile(
-                        leading: TextFormField(
-                          initialValue: items[index]._money.toString(),
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp(r'[0-9]'))
-                          ],
-                          onChanged: _handleMoney,
+                        leading: Container(
+                          width: MediaQuery.of(context).size.width / 3,
+                          child: TextFormField(
+                            initialValue: items[index]._money.toString(),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9]'))
+                            ],
+                            onChanged: _handleMoney,
+                          ),
                         ),
-                        title: TextFormField(
-                          initialValue: items[index]._name,
-                          //onChanged:,
+                        title: Container(
+                          width: MediaQuery.of(context).size.width / 3,
+                          child: TextFormField(
+                            initialValue: items[index]._name,
+                            //onChanged:,
+                          ),
                         ),
-                        trailing: Row(
-                          children: [
-                            GestureDetector(
-                              child: Icon(CupertinoIcons.minus_circled),
-                              //onTap:,
-                            ),
-                            Text(items[index]._quantity.toString()),
-                            GestureDetector(
-                              child: Icon(CupertinoIcons.add_circled),
-                              //onTap:,
-                            )
-                          ],
+                        trailing: Container(
+                          width: MediaQuery.of(context).size.width / 3,
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                child: Icon(CupertinoIcons.minus_circled),
+                                //onTap:,
+                              ),
+                              Text(items[index]._quantity.toString()),
+                              GestureDetector(
+                                child: Icon(CupertinoIcons.add_circled),
+                                //onTap:,
+                              )
+                            ],
+                          ),
                         ),
                       ),
                       onDismissed: (direction) {
